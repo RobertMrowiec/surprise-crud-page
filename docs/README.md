@@ -1,4 +1,4 @@
-# Overview
+# Overview 
 This page will guide You how [`surprise-crud`](https://www.npmjs.com/package/surprise-crud) package works.
 
 ## Prerequisites
@@ -17,12 +17,13 @@ At this moment, this package works only with MongoDB and Express, but soon will 
 
 * or just use my example app described below in Real code examples section.
 
-# Installation
+# Setup
+
+## Installation
 
 Just simply install package with npm: </br>
 `npm install --save surprise-crud`
 
-# Setup
 After installing package, go to any of Your route file ( or create new one ) and import package:
 
 ```
@@ -53,18 +54,19 @@ crud(model, router, options)
 
 You probably think, what model and options are? So let's start talking about how this CRUD function works. <br>
 
-## `model`
+`model`
 It's the first argument. I'm sure You have a model for Your collection already, but if not: 
 * read [Mongoose Models docs](https://mongoosejs.com/docs/models.html),
 * create model, 
 * import it to route file
 * replace the first argument with Your model.
 
-## `router`
+`router`
 It's the second argument which You already have imported from express.Router().
 
-## `options`
-It's the last argument. **THIS ARGUMENT IS OPTIONAL!** `options` is an object containing: 
+`options`
+**THIS ARGUMENT IS OPTIONAL!** <br>
+This is the last argument. `options` is an object containing: 
 ```
 {
 	sort: String (You can pass here any name of key from collection. Default is 'createdAt')
@@ -74,27 +76,30 @@ It's the last argument. **THIS ARGUMENT IS OPTIONAL!** `options` is an object co
 ```
 
 # Available Methods
-* ## Get 
+
+***Get*** and ***GetPagination*** methods also includes filtering which is optional! (more in section `Filtering`)
+
+*  Get 
 ```
-Method: GET, path: /
+Method: GET, path: /?filter=key&filterBy=value
 ```
-* ## GetById 
+*  GetById 
 ```
 Method: GET, path: /:id
 ```
-* ## GetPagination
+*  GetPagination
 ```
-Method: GET, path: /page/:page/limit/:limit
+Method: GET, path: /page/:page/limit/:limit?filter=key&filterBy=value
 ```
-* ## Post
+*  Post
 ```
 Method: POST, path: /
 ```
-* ## Put
+*  Put
 ```
 Method: PUT, path: /:id
 ```
-* ## Delete
+*  Delete
 ```
 Method: DELETE, path: /:id
 ```
@@ -141,6 +146,37 @@ in `options` object and defining endpoint name on Your own as first parameter of
 * Path: /api/projects/:id
 
 ------------------------
+
+# Filtering
+
+Filters are built of:
+* `filter`
+is a key which You want to compare from Model
+
+* `filterBy`
+is a value which You're looking for in `filter` key
+
+Example: <br>
+Imagine we have a User model which has 3 keys: `name`, `surname`, `age`.
+```
+	User: {
+		name: String,
+		surname: String,
+		age: Number
+	}
+```
+
+What if we want to find every User whose name is Patrick?:
+
+```
+api/users?filter=name&filterBy=Patrick
+```
+
+We want to paginate them with limit 5 per page?:
+
+```
+api/users/page/1/limit/5?filter=name&filterBy=Patrick
+```
 
 # Real code examples
 
@@ -225,6 +261,35 @@ Endpoints:
 	Method: PUT,    path: /api/users/5ca253b595477001055a47b2
 	Method: DELETE, path: /api/users/5ca253b595477001055a47b2
 ```
+
+* Example with doing everything in app.js without external files: 
+
+_app.js_
+
+```
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const Currency = require('../models/Currency');
+const { crud } = require('surprise-crud');
+
+const app = express()
+const router = express.Router();
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+app.use(crud(Currency, router, { methods: ['Post', 'Delete'] }));
+
+//rest of stuff to start server
+```
+
+Endpoints:
+```
+	Method: POST, path: /api/currencies
+	Method: DELETE, path: /api/currencies/5ca253b935377011053a47b2
+```
+------------------------
 
 
 # Tests
