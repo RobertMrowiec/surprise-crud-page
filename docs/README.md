@@ -1,5 +1,7 @@
 # Overview 
-This page will guide You how [`surprise-crud`](https://www.npmjs.com/package/surprise-crud) package works.
+This page will guide You how [`surprise-crud`](https://www.npmjs.com/package/surprise-crud) package works. <br> 
+<br>
+Please check out also my [surprisejs-cors](https://www.npmjs.com/package/surprisejs-cors) library, which setup cors in Your express app very quickly, with small amount of work from Your side.
 
 ## Prerequisites
 You will need the following things installed on your computer.
