@@ -15,7 +15,9 @@ At this moment, this package works only with MongoDB and Express, but soon will 
 	* working connection to MongoDB
 	* bodyParser
 
-* or just use my example app described below in Real code examples section.
+* or just use my example app below.
+
+# [Example app](https://github.com/RobertMrowiec/surprise-crud-example-app)
 
 # Setup
 
